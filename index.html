@@ -2,8 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bússola Diária - Método Groppo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bússola Diária</title>
+  <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -11,247 +12,206 @@
       --card-bg: #1e293b;
       --text-color: #f8fafc;
       --accent-color: #38bdf8;
-      --accent-hover: #0284c7;
-      --subtext-color: #94a3b8;
+      --button-bg: #0284c7;
+      --button-hover: #0369a1;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
-      padding: 20px;
+      padding: 16px;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      box-sizing: border-box;
     }
 
     .container {
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       background-color: var(--card-bg);
-      padding: 24px;
       border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      box-sizing: border-box;
     }
 
     h2 {
       margin-top: 0;
+      color: var(--accent-color);
       font-size: 1.3rem;
       text-align: center;
-      color: var(--accent-color);
     }
 
     .user-info {
-      font-size: 0.85rem;
-      color: var(--subtext-color);
-      background: rgba(255,255,255,0.05);
-      padding: 8px 12px;
-      border-radius: 6px;
-      margin-bottom: 20px;
+      font-size: 0.9rem;
       text-align: center;
+      color: #94a3b8;
+      margin-bottom: 20px;
     }
 
-    .field-group {
+    .form-group {
       margin-bottom: 20px;
     }
 
     label {
       display: block;
       margin-bottom: 8px;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 0.95rem;
     }
 
-    .chip-group {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .chip-btn {
-      flex: 1;
-      padding: 10px;
-      background-color: #0f172a;
-      border: 1px solid #334155;
-      color: #fff;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-    }
-
-    .chip-btn.selected {
-      background-color: var(--accent-color);
-      color: #0f172a;
-      font-weight: bold;
-      border-color: var(--accent-color);
-    }
-
-    .slider-container {
+    .range-container {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    input[type=range] {
+    input[type="range"] {
       flex: 1;
       accent-color: var(--accent-color);
     }
 
-    .slider-value {
-      font-size: 1.1rem;
+    .range-value {
       font-weight: bold;
       color: var(--accent-color);
-      min-width: 35px;
+      min-width: 24px;
       text-align: right;
     }
 
-    button.submit-btn {
+    select, input[type="text"] {
       width: 100%;
-      padding: 14px;
-      background-color: var(--accent-color);
-      color: #0f172a;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background-color: #0f172a;
+      color: white;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
       border: none;
       border-radius: 8px;
+      background-color: var(--button-bg);
+      color: white;
       font-size: 1rem;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
-      margin-top: 10px;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: var(--button-hover);
     }
 
     #status {
       margin-top: 15px;
       text-align: center;
+      font-weight: 500;
       font-size: 0.9rem;
-    }
-
-    .locked-card {
-      text-align: center;
-      padding: 20px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h2 id="ritoTitulo">🧭 Bússola Diária</h2>
-    <div class="user-info" id="userDisplay">Carregando...</div>
+    <h2 id="ritoTitulo">Rito Diário</h2>
+    <div class="user-info" id="userInfo">Carregando perfil...</div>
 
     <form id="bussolaForm">
-      <div id="formContent"></div>
-      <button type="submit" id="btnEnviar" class="submit-btn" style="display:none;">Salvar Registro</button>
+      <div id="formFields">
+        <!-- Campos dinâmicos carregados via JS -->
+      </div>
+
+      <button type="submit" id="btnEnviar">Salvar Registro</button>
     </form>
 
     <div id="status"></div>
   </div>
 
   <script>
-    const URL_DO_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbzGfSW-yjoTod01HxxzDuQq3Fvj376AMgU6U7GJU_4NSxiZutvhk09TRafTyFp7De6I/exec";
-
+    // Inicializa o SDK do Telegram WebApp
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    let userChatId = "";
-    let userName = "";
+    // URL do Web App do Apps Script
+    const URL_DO_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbzGfSW-yjoTod01HxxzDuQq3Fvj376AMgU6U7GJU_4NSxiZutvhk09TRafTyFp7De6I/exec";
 
-    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-      const u = tg.initDataUnsafe.user;
-      userChatId = String(u.id);
-      userName = ((u.first_name || "") + " " + (u.last_name || "")).trim();
-    }
+    // Captura dados do usuário logado no Telegram
+    const user = tg.initDataUnsafe?.user;
+    const userChatId = user?.id || "Desconhecido";
+    const userName = user ? `${user.first_name} ${user.last_name || ''}`.trim() : "Alquimista";
 
-    if (!userName) userName = "Alquimista";
-    if (!userChatId) userChatId = "Sem Chat ID";
+    document.getElementById('userInfo').innerText = `Alquimista: ${userName}`;
 
-    document.getElementById('userDisplay').innerHTML = `Alquimista: <b>${userName}</b>`;
-
+    // Define o Rito automaticamente baseado no horário
     const horaAtual = new Date().getHours();
     let ritoNome = "";
-    let formHTML = "";
+    const fieldsDiv = document.getElementById('formFields');
 
-    if (horaAtual >= 5 && horaAtual < 12) {
+    if (horaAtual < 12) {
       ritoNome = "Rito da Manhã";
-      formHTML = `
-        <div class="field-group">
-          <label>Como acordou hoje? (Disposição / Rigidez):</label>
-          <div class="slider-container">
-            <input type="range" id="m_disposicao" min="1" max="5" value="3" oninput="document.getElementById('v_disp').innerText = this.value + '/5'">
-            <span class="slider-value" id="v_disp">3/5</span>
+      fieldsDiv.innerHTML = `
+        <div class="form-group">
+          <label for="m_disposicao">Nível de Disposição e Rigidez (1 a 5):</label>
+          <div class="range-container">
+            <input type="range" id="m_disposicao" min="1" max="5" value="3" oninput="document.getElementById('v_disp').innerText = this.value">
+            <span class="range-value" id="v_disp">3</span>
           </div>
         </div>
       `;
-    } else if (horaAtual >= 12 && horaAtual < 18) {
+    } else if (horaAtual < 18) {
       ritoNome = "Rito da Tarde";
-      formHTML = `
-        <div class="field-group">
-          <label>Pausas & Movimento:</label>
-          <div class="chip-group" id="pausasGroup">
-            <div class="chip-btn" onclick="selectChip(this, 'pausaVal', 'Muito Tempo Sentado')">Sem Pausas</div>
-            <div class="chip-btn" onclick="selectChip(this, 'pausaVal', 'Pausas Parciais')">Parciais</div>
-            <div class="chip-btn selected" onclick="selectChip(this, 'pausaVal', 'Alonguei / Caminhei')">Alonguei / Caminhei</div>
-          </div>
-          <input type="hidden" id="pausaVal" value="Alonguei / Caminhei">
+      fieldsDiv.innerHTML = `
+        <div class="form-group">
+          <label for="pausaVal">Fez as pausas ativas hoje?</label>
+          <select id="pausaVal">
+            <option value="Sim">Sim</option>
+            <option value="Parcialmente">Parcialmente</option>
+            <option value="Não">Não</option>
+          </select>
         </div>
-
-        <div class="field-group">
-          <label>Hidratação & Nutrição:</label>
-          <div class="slider-container">
-            <input type="range" id="t_hidratacao" min="1" max="5" value="3" oninput="document.getElementById('v_hidra').innerText = this.value + '/5'">
-            <span class="slider-value" id="v_hidra">3/5</span>
-          </div>
-        </div>
-      `;
-    } else if (horaAtual >= 18 && horaAtual <= 23) {
-      ritoNome = "Rito da Noite";
-      formHTML = `
-        <div class="field-group">
-          <label>Treinou hoje?</label>
-          <div class="chip-group">
-            <div class="chip-btn selected" onclick="selectChip(this, 'treinoVal', 'Sim')">Sim</div>
-            <div class="chip-btn" onclick="selectChip(this, 'treinoVal', 'Não')">Não</div>
-          </div>
-          <input type="hidden" id="treinoVal" value="Sim">
-        </div>
-
-        <div class="field-group">
-          <label>Humor / Satisfação com o dia:</label>
-          <div class="slider-container">
-            <input type="range" id="n_humor" min="1" max="5" value="3" oninput="document.getElementById('v_humor').innerText = this.value + '/5'">
-            <span class="slider-value" id="v_humor">3/5</span>
+        <div class="form-group">
+          <label for="t_hidratacao">Hidratação e Foco (1 a 5):</label>
+          <div class="range-container">
+            <input type="range" id="t_hidratacao" min="1" max="5" value="3" oninput="document.getElementById('v_hidra').innerText = this.value">
+            <span class="range-value" id="v_hidra">3</span>
           </div>
         </div>
       `;
     } else {
-      ritoNome = "Fora de Horário";
-      formHTML = `
-        <div class="locked-card">
-          <p>🌙 O período de registros está fechado.</p>
-          <p style="color: var(--subtext-color); font-size: 0.85rem;">A Bússola da Manhã abre às 05:00. Descanse bem!</p>
+      ritoNome = "Rito da Noite";
+      fieldsDiv.innerHTML = `
+        <div class="form-group">
+          <label for="treinoVal">Treino / Atividade Física efetuada?</label>
+          <select id="treinoVal">
+            <option value="Realizado com Sucesso">Realizado com Sucesso</option>
+            <option value="Treino Leve / Caminhada">Treino Leve / Caminhada</option>
+            <option value="Descanso / Off">Descanso / Off</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="n_humor">Avaliação do Dia / Humor (1 a 5):</label>
+          <div class="range-container">
+            <input type="range" id="n_humor" min="1" max="5" value="3" oninput="document.getElementById('v_humor').innerText = this.value">
+            <span class="range-value" id="v_humor">3</span>
+          </div>
         </div>
       `;
     }
 
-    document.getElementById('ritoTitulo').innerText = "🧭 " + ritoNome;
-    document.getElementById('formContent').innerHTML = formHTML;
+    document.getElementById('ritoTitulo').innerText = `🧭 ${ritoNome}`;
 
-    if (ritoNome !== "Fora de Horário") {
-      document.getElementById('btnEnviar').style.display = "block";
-    }
-
-    function selectChip(el, targetId, val) {
-      const parent = el.parentElement;
-      parent.querySelectorAll('.chip-btn').forEach(btn => btn.classList.remove('selected'));
-      el.classList.add('selected');
-      document.getElementById(targetId).value = val;
-    }
-
+    // Evento de envio do formulário
     document.getElementById('bussolaForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      
+
       let respostaString = "";
 
       if (ritoNome === "Rito da Manhã") {
@@ -277,11 +237,14 @@
         resposta: respostaString
       };
 
+      // Envio otimizado para contornar limitações de CORS dentro do iFrame do Telegram
       fetch(URL_DO_APPS_SCRIPT, {
         method: "POST",
         mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "payload=" + encodeURIComponent(JSON.stringify(payload))
       })
       .then(() => {
         statusDiv.style.color = "#4ade80";
