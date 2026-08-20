@@ -2,262 +2,145 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Bússola Diária</title>
-  <!-- Telegram Web App SDK -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bússola — Oficina dos Alquimistas</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --text-color: #f8fafc;
-      --accent-color: #38bdf8;
-      --button-bg: #0284c7;
-      --button-hover: #0369a1;
-    }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      background-color: var(--tg-theme-bg-color, #ffffff);
+      color: var(--tg-theme-text-color, #222222);
       margin: 0;
       padding: 16px;
       box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
     }
-
-    .container {
-      width: 100%;
-      max-width: 420px;
-      background-color: var(--card-bg);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      box-sizing: border-box;
-    }
-
     h2 {
       margin-top: 0;
-      color: var(--accent-color);
-      font-size: 1.3rem;
+      color: var(--tg-theme-link-color, #2481cc);
       text-align: center;
     }
-
-    .user-info {
-      font-size: 0.9rem;
-      text-align: center;
-      color: #94a3b8;
-      margin-bottom: 20px;
+    .field-group {
+      background: var(--tg-theme-secondary-bg-color, #f4f4f5);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
     }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
     label {
       display: block;
       margin-bottom: 8px;
-      font-weight: 500;
-      font-size: 0.95rem;
     }
-
-    .range-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    small {
+      color: #666;
+      display: block;
+      margin-top: 4px;
     }
-
     input[type="range"] {
-      flex: 1;
-      accent-color: var(--accent-color);
-    }
-
-    .range-value {
-      font-weight: bold;
-      color: var(--accent-color);
-      min-width: 24px;
-      text-align: right;
-    }
-
-    select, input[type="text"] {
       width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      background-color: #0f172a;
-      color: white;
-      font-size: 1rem;
-      box-sizing: border-box;
+      margin: 12px 0;
     }
-
+    .val-display {
+      text-align: right;
+      font-weight: bold;
+      color: var(--tg-theme-link-color, #2481cc);
+    }
     button {
       width: 100%;
-      padding: 12px;
+      background-color: var(--tg-theme-button-color, #2481cc);
+      color: var(--tg-theme-button-text-color, #ffffff);
       border: none;
-      border-radius: 8px;
-      background-color: var(--button-bg);
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.2s;
     }
-
-    button:hover {
-      background-color: var(--button-hover);
-    }
-
-    #status {
-      margin-top: 15px;
-      text-align: center;
-      font-weight: 500;
-      font-size: 0.9rem;
+    button:disabled {
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h2 id="ritoTitulo">Rito Diário</h2>
-    <div class="user-info" id="userInfo">Carregando perfil...</div>
+  <h2>🧭 Rito da Manhã</h2>
 
-    <form id="bussolaForm">
-      <div id="formFields">
-        <!-- Campos dinâmicos carregados via JS -->
-      </div>
+  <form id="formBussola">
+    <!-- BARRA 1: RIGIDEZ / DOR -->
+    <div class="field-group">
+      <label for="rigidez">
+        <b>Rigidez / Dor (Corpo)</b>
+        <small>(1 = Corpo livre/sem dor, 5 = Muito rígido/com dor)</small>
+      </label>
+      <input type="range" id="rigidez" min="1" max="5" value="3" oninput="document.getElementById('valRigidez').innerText = this.value">
+      <div class="val-display">Nível: <span id="valRigidez">3</span>/5</div>
+    </div>
 
-      <button type="submit" id="btnEnviar">Salvar Registro</button>
-    </form>
+    <!-- BARRA 2: DISPOSIÇÃO / HUMOR -->
+    <div class="field-group">
+      <label for="disposicao">
+        <b>Disposição / Humor (Mente)</b>
+        <small>(1 = Sem energia/desanimado, 5 = Alta disposição/animado)</small>
+      </label>
+      <input type="range" id="disposicao" min="1" max="5" value="3" oninput="document.getElementById('valDisposicao').innerText = this.value">
+      <div class="val-display">Nível: <span id="valDisposicao">3</span>/5</div>
+    </div>
 
-    <div id="status"></div>
-  </div>
+    <button type="button" id="btnSalvar" onclick="enviarRegistro()">Salvar Rito da Manhã</button>
+  </form>
 
   <script>
-    // Inicializa o SDK do Telegram WebApp
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-
-    // URL do Web App do Apps Script
-    const URL_DO_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbzGfSW-yjoTod01HxxzDuQq3Fvj376AMgU6U7GJU_4NSxiZutvhk09TRafTyFp7De6I/exec";
-
-    // Captura dados do usuário logado no Telegram
-    const user = tg.initDataUnsafe?.user;
-    const userChatId = user?.id || "Desconhecido";
-    const userName = user ? `${user.first_name} ${user.last_name || ''}`.trim() : "Alquimista";
-
-    document.getElementById('userInfo').innerText = `Alquimista: ${userName}`;
-
-    // Define o Rito automaticamente baseado no horário
-    const horaAtual = new Date().getHours();
-    let ritoNome = "";
-    const fieldsDiv = document.getElementById('formFields');
-
-    if (horaAtual < 12) {
-      ritoNome = "Rito da Manhã";
-      fieldsDiv.innerHTML = `
-        <div class="form-group">
-          <label for="m_disposicao">Nível de Disposição e Rigidez (1 a 5):</label>
-          <div class="range-container">
-            <input type="range" id="m_disposicao" min="1" max="5" value="3" oninput="document.getElementById('v_disp').innerText = this.value">
-            <span class="range-value" id="v_disp">3</span>
-          </div>
-        </div>
-      `;
-    } else if (horaAtual < 18) {
-      ritoNome = "Rito da Tarde";
-      fieldsDiv.innerHTML = `
-        <div class="form-group">
-          <label for="pausaVal">Fez as pausas ativas hoje?</label>
-          <select id="pausaVal">
-            <option value="Sim">Sim</option>
-            <option value="Parcialmente">Parcialmente</option>
-            <option value="Não">Não</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="t_hidratacao">Hidratação e Foco (1 a 5):</label>
-          <div class="range-container">
-            <input type="range" id="t_hidratacao" min="1" max="5" value="3" oninput="document.getElementById('v_hidra').innerText = this.value">
-            <span class="range-value" id="v_hidra">3</span>
-          </div>
-        </div>
-      `;
-    } else {
-      ritoNome = "Rito da Noite";
-      fieldsDiv.innerHTML = `
-        <div class="form-group">
-          <label for="treinoVal">Treino / Atividade Física efetuada?</label>
-          <select id="treinoVal">
-            <option value="Realizado com Sucesso">Realizado com Sucesso</option>
-            <option value="Treino Leve / Caminhada">Treino Leve / Caminhada</option>
-            <option value="Descanso / Off">Descanso / Off</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="n_humor">Avaliação do Dia / Humor (1 a 5):</label>
-          <div class="range-container">
-            <input type="range" id="n_humor" min="1" max="5" value="3" oninput="document.getElementById('v_humor').innerText = this.value">
-            <span class="range-value" id="v_humor">3</span>
-          </div>
-        </div>
-      `;
+    // Inicializa a API do Telegram Mini App
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.expand();
     }
 
-    document.getElementById('ritoTitulo').innerText = `🧭 ${ritoNome}`;
+    // ⚠️ COLE AQUI A SUA URL DO GOOGLE APPS SCRIPT
+    const WEBHOOK_URL = "SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI";
 
-    // Evento de envio do formulário
-    document.getElementById('bussolaForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      let respostaString = "";
-
-      if (ritoNome === "Rito da Manhã") {
-        respostaString = "Disposição/Rigidez: " + document.getElementById('m_disposicao').value + "/5";
-      } else if (ritoNome === "Rito da Tarde") {
-        respostaString = "Pausas: " + document.getElementById('pausaVal').value + " | Hidratação/Foco: " + document.getElementById('t_hidratacao').value + "/5";
-      } else if (ritoNome === "Rito da Noite") {
-        respostaString = "Treino: " + document.getElementById('treinoVal').value + " | Humor: " + document.getElementById('n_humor').value + "/5";
-      }
-
-      const btn = document.getElementById('btnEnviar');
-      const statusDiv = document.getElementById('status');
-
+    function enviarRegistro() {
+      const btn = document.getElementById("btnSalvar");
       btn.disabled = true;
       btn.innerText = "Salvando...";
-      statusDiv.style.color = "#38bdf8";
-      statusDiv.innerText = "Enviando registro...";
 
+      // Captura os valores individuais das duas barras
+      const rigidez = document.getElementById("rigidez").value;
+      const disposicao = document.getElementById("disposicao").value;
+
+      // Formata exatamente para a mesma coluna: R= x/5 | D= x/5
+      const respostaFormatada = `R=${rigidez}/5 | D=${disposicao}/5`;
+
+      // Monta o payload padronizado que seu Apps Script espera
       const payload = {
-        chatId: userChatId,
-        nome: userName,
-        rito: ritoNome,
-        resposta: respostaString
+        chatId: tg?.initDataUnsafe?.user?.id || "Sem Chat ID",
+        nome: tg?.initDataUnsafe?.user?.first_name || "Alquimista",
+        rito: "Rito da Manhã",
+        resposta: respostaFormatada
       };
 
-      // Envio otimizado para contornar limitações de CORS dentro do iFrame do Telegram
-      fetch(URL_DO_APPS_SCRIPT, {
+      // Dispara os dados para o Google Apps Script
+      fetch(WEBHOOK_URL, {
         method: "POST",
         mode: "no-cors",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json"
         },
-        body: "payload=" + encodeURIComponent(JSON.stringify(payload))
+        body: JSON.stringify(payload)
       })
       .then(() => {
-        statusDiv.style.color = "#4ade80";
-        statusDiv.innerText = "✅ Registro salvo com sucesso!";
-        setTimeout(() => { tg.close(); }, 1200);
+        btn.innerText = "✅ Registrado!";
+        setTimeout(() => {
+          if (tg) {
+            tg.close();
+          }
+        }, 1200);
       })
-      .catch((err) => {
-        statusDiv.style.color = "#f87171";
-        statusDiv.innerText = "❌ Falha ao salvar.";
+      .catch((erro) => {
+        alert("Erro ao salvar. Tente novamente.");
         btn.disabled = false;
-        btn.innerText = "Salvar Registro";
+        btn.innerText = "Salvar Rito da Manhã";
+        console.error(erro);
       });
-    });
+    }
   </script>
 </body>
 </html>
