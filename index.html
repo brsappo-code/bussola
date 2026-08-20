@@ -11,28 +11,30 @@
       background-color: var(--tg-theme-bg-color, #ffffff);
       color: var(--tg-theme-text-color, #222222);
       margin: 0;
-      padding: 16px;
+      padding: 18px;
       box-sizing: border-box;
+      font-size: 17px;
     }
     h2 {
       margin-top: 0;
       color: var(--tg-theme-link-color, #2481cc);
       text-align: center;
+      font-size: 24px;
     }
     .tabs {
       display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 22px;
     }
     .tab-btn {
       flex: 1;
-      padding: 10px 4px;
-      font-size: 13px;
+      padding: 12px 6px;
+      font-size: 15px;
       font-weight: bold;
       border: 1px solid var(--tg-theme-link-color, #2481cc);
       background: transparent;
       color: var(--tg-theme-link-color, #2481cc);
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
     }
     .tab-btn.active {
@@ -41,38 +43,43 @@
     }
     .field-group {
       background: var(--tg-theme-secondary-bg-color, #f4f4f5);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 18px;
     }
     label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      font-size: 18px;
     }
     small {
-      color: #666;
+      color: #555555;
       display: block;
-      margin-top: 4px;
+      margin-top: 6px;
+      font-size: 15px;
+      line-height: 1.3;
     }
     input[type="range"] {
       width: 100%;
-      margin: 12px 0;
+      margin: 14px 0;
     }
     .radio-group {
       display: flex;
-      gap: 16px;
-      margin-top: 8px;
+      gap: 20px;
+      margin-top: 10px;
     }
     .radio-group label {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       font-weight: normal;
       cursor: pointer;
+      font-size: 17px;
     }
     .val-display {
       text-align: right;
       font-weight: bold;
+      font-size: 18px;
       color: var(--tg-theme-link-color, #2481cc);
     }
     .btn-submit {
@@ -81,11 +88,11 @@
       color: var(--tg-theme-button-text-color, #ffffff);
       border: none;
       border-radius: 12px;
-      padding: 14px;
-      font-size: 16px;
+      padding: 16px;
+      font-size: 18px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 12px;
     }
     .btn-submit:disabled {
       opacity: 0.6;
@@ -182,8 +189,7 @@
       tg.expand();
     }
 
-    // ⚠️ ATENÇÃO: COLE SUA URL DO GOOGLE APPS SCRIPT ABAIXO
-    const WEBHOOK_URL = "SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI";
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzGfSW-yjoTod01HxxzDuQq3Fvj376AMgU6U7GJU_4NSxiZutvhk09TRafTyFp7De6I/exec";
 
     let ritoAtual = "Manhã";
 
