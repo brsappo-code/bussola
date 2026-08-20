@@ -19,6 +19,27 @@
       color: var(--tg-theme-link-color, #2481cc);
       text-align: center;
     }
+    /* Menu de Abas dos 3 Ritos */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 4px;
+      font-size: 13px;
+      font-weight: bold;
+      border: 1px solid var(--tg-theme-link-color, #2481cc);
+      background: transparent;
+      color: var(--tg-theme-link-color, #2481cc);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background-color: var(--tg-theme-button-color, #2481cc);
+      color: var(--tg-theme-button-text-color, #ffffff);
+    }
     .field-group {
       background: var(--tg-theme-secondary-bg-color, #f4f4f5);
       border-radius: 12px;
@@ -43,7 +64,7 @@
       font-weight: bold;
       color: var(--tg-theme-link-color, #2481cc);
     }
-    button {
+    .btn-submit {
       width: 100%;
       background-color: var(--tg-theme-button-color, #2481cc);
       color: var(--tg-theme-button-text-color, #ffffff);
@@ -53,91 +74,156 @@
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
+      margin-top: 10px;
     }
-    button:disabled {
+    .btn-submit:disabled {
       opacity: 0.6;
+    }
+    .rito-content {
+      display: none;
+    }
+    .rito-content.active {
+      display: block;
     }
   </style>
 </head>
 <body>
 
-  <h2>🧭 Rito da Manhã</h2>
+  <h2>🧭 Bússola Diária</h2>
+
+  <!-- Seleção dos 3 Ritos -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="selecionarRito('Manhã')">☀️ Manhã</button>
+    <button class="tab-btn" onclick="selecionarRito('Tarde')">🌤️ Tarde</button>
+    <button class="tab-btn" onclick="selecionarRito('Noite')">🌙 Noite</button>
+  </div>
 
   <form id="formBussola">
-    <!-- BARRA 1: RIGIDEZ / DOR -->
-    <div class="field-group">
-      <label for="rigidez">
-        <b>Rigidez / Dor (Corpo)</b>
-        <small>(1 = Corpo livre/sem dor, 5 = Muito rígido/com dor)</small>
-      </label>
-      <input type="range" id="rigidez" min="1" max="5" value="3" oninput="document.getElementById('valRigidez').innerText = this.value">
-      <div class="val-display">Nível: <span id="valRigidez">3</span>/5</div>
+
+    <!-- FORMULÁRIO 1: RITO DA MANHÃ -->
+    <div id="rito-Manhã" class="rito-content active">
+      <div class="field-group">
+        <label for="rigidez">
+          <b>Rigidez / Dor (Corpo)</b>
+          <small>(1 = Corpo livre/sem dor, 5 = Muito rígido/com dor)</small>
+        </label>
+        <input type="range" id="rigidez" min="1" max="5" value="3" oninput="document.getElementById('valRigidez').innerText = this.value">
+        <div class="val-display">Nível: <span id="valRigidez">3</span>/5</div>
+      </div>
+
+      <div class="field-group">
+        <label for="disposicao">
+          <b>Disposição / Humor (Mente)</b>
+          <small>(1 = Sem energia/desanimado, 5 = Alta disposição/animado)</small>
+        </label>
+        <input type="range" id="disposicao" min="1" max="5" value="3" oninput="document.getElementById('valDisposicao').innerText = this.value">
+        <div class="val-display">Nível: <span id="valDisposicao">3</span>/5</div>
+      </div>
     </div>
 
-    <!-- BARRA 2: DISPOSIÇÃO / HUMOR -->
-    <div class="field-group">
-      <label for="disposicao">
-        <b>Disposição / Humor (Mente)</b>
-        <small>(1 = Sem energia/desanimado, 5 = Alta disposição/animado)</small>
-      </label>
-      <input type="range" id="disposicao" min="1" max="5" value="3" oninput="document.getElementById('valDisposicao').innerText = this.value">
-      <div class="val-display">Nível: <span id="valDisposicao">3</span>/5</div>
+    <!-- FORMULÁRIO 2: RITO DA TARDE -->
+    <div id="rito-Tarde" class="rito-content">
+      <div class="field-group">
+        <label for="focoTarde">
+          <b>Foco & Nível de Energia (Meio do Dia)</b>
+          <small>(1 = Cansaço/sem foco, 5 = Foco total/energia alta)</small>
+        </label>
+        <input type="range" id="focoTarde" min="1" max="5" value="3" oninput="document.getElementById('valFocoTarde').innerText = this.value">
+        <div class="val-display">Nível: <span id="valFocoTarde">3</span>/5</div>
+      </div>
     </div>
 
-    <button type="button" id="btnSalvar" onclick="enviarRegistro()">Salvar Rito da Manhã</button>
+    <!-- FORMULÁRIO 3: RITO DA NOITE -->
+    <div id="rito-Noite" class="rito-content">
+      <div class="field-group">
+        <label for="descansoNoite">
+          <b>Alquimia Invisível / Qualidade do Desligamento</b>
+          <small>(1 = Mente acelerada/agitado, 5 = Desligamento total/pronto para descansar)</small>
+        </label>
+        <input type="range" id="descansoNoite" min="1" max="5" value="3" oninput="document.getElementById('valDescansoNoite').innerText = this.value">
+        <div class="val-display">Nível: <span id="valDescansoNoite">3</span>/5</div>
+      </div>
+    </div>
+
+    <button type="button" id="btnSalvar" class="btn-submit" onclick="enviarRegistro()">Salvar Rito da Manhã</button>
   </form>
 
   <script>
-    // Inicializa a API do Telegram Mini App
     const tg = window.Telegram?.WebApp;
     if (tg) {
       tg.expand();
     }
 
-    // ⚠️ COLE AQUI A SUA URL DO GOOGLE APPS SCRIPT
-    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzGfSW-yjoTod01HxxzDuQq3Fvj376AMgU6U7GJU_4NSxiZutvhk09TRafTyFp7De6I/exec";
+    // ⚠️ ATENÇÃO: COLE SUA URL DO GOOGLE APPS SCRIPT ABAIXO
+    const WEBHOOK_URL = "SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI";
+
+    let ritoAtual = "Manhã";
+
+    function selecionarRito(rito) {
+      ritoAtual = rito;
+      
+      const btns = document.querySelectorAll('.tab-btn');
+      btns.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.querySelectorAll('.rito-content').forEach(div => div.classList.remove('active'));
+      document.getElementById(`rito-${rito}`).classList.add('active');
+
+      document.getElementById('btnSalvar').innerText = `Salvar Rito da ${rito}`;
+    }
 
     function enviarRegistro() {
       const btn = document.getElementById("btnSalvar");
       btn.disabled = true;
       btn.innerText = "Salvando...";
 
-      // Captura os valores individuais das duas barras
-      const rigidez = document.getElementById("rigidez").value;
-      const disposicao = document.getElementById("disposicao").value;
+      let respostaFormatada = "";
 
-      // Formata exatamente para a mesma coluna: R= x/5 | D= x/5
-      const respostaFormatada = `R=${rigidez}/5 | D=${disposicao}/5`;
+      if (ritoAtual === "Manhã") {
+        const rigidez = document.getElementById("rigidez").value;
+        const disposicao = document.getElementById("disposicao").value;
+        respostaFormatada = `R=${rigidez}/5 | D=${disposicao}/5`;
+      } else if (ritoAtual === "Tarde") {
+        const foco = document.getElementById("focoTarde").value;
+        respostaFormatada = `Foco/Energia: ${foco}/5`;
+      } else if (ritoAtual === "Noite") {
+        const descanso = document.getElementById("descansoNoite").value;
+        respostaFormatada = `Desligamento/Descanso: ${descanso}/5`;
+      }
 
-      // Monta o payload padronizado que seu Apps Script espera
+      // Resgate do Nome Completo do Alquimista
+      const usuario = tg?.initDataUnsafe?.user;
+      let nomeCompleto = "Alquimista";
+
+      if (usuario) {
+        const primeiroNome = usuario.first_name || "";
+        const sobrenome = usuario.last_name || "";
+        nomeCompleto = `${primeiroNome} ${sobrenome}`.trim();
+      }
+
       const payload = {
-        chatId: tg?.initDataUnsafe?.user?.id || "Sem Chat ID",
-        nome: tg?.initDataUnsafe?.user?.first_name || "Alquimista",
-        rito: "Rito da Manhã",
+        chatId: usuario?.id || "Sem Chat ID",
+        nome: nomeCompleto,
+        rito: `Rito da ${ritoAtual}`,
         resposta: respostaFormatada
       };
 
-      // Dispara os dados para o Google Apps Script
       fetch(WEBHOOK_URL, {
         method: "POST",
         mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       })
       .then(() => {
         btn.innerText = "✅ Registrado!";
         setTimeout(() => {
-          if (tg) {
-            tg.close();
-          }
+          if (tg) tg.close();
         }, 1200);
       })
       .catch((erro) => {
         alert("Erro ao salvar. Tente novamente.");
         btn.disabled = false;
-        btn.innerText = "Salvar Rito da Manhã";
+        btn.innerText = `Salvar Rito da ${ritoAtual}`;
         console.error(erro);
       });
     }
