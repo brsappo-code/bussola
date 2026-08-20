@@ -19,7 +19,6 @@
       color: var(--tg-theme-link-color, #2481cc);
       text-align: center;
     }
-    /* Menu de Abas dos 3 Ritos */
     .tabs {
       display: flex;
       gap: 8px;
@@ -58,6 +57,18 @@
     input[type="range"] {
       width: 100%;
       margin: 12px 0;
+    }
+    .radio-group {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: normal;
+      cursor: pointer;
     }
     .val-display {
       text-align: right;
@@ -124,24 +135,41 @@
     <!-- FORMULÁRIO 2: RITO DA TARDE -->
     <div id="rito-Tarde" class="rito-content">
       <div class="field-group">
-        <label for="focoTarde">
-          <b>Foco & Nível de Energia (Meio do Dia)</b>
-          <small>(1 = Cansaço/sem foco, 5 = Foco total/energia alta)</small>
+        <label><b>Pausa Ativa (2 a 5 min)</b></label>
+        <div class="radio-group">
+          <label><input type="radio" name="pausaAtiva" value="Sim" checked> Sim</label>
+          <label><input type="radio" name="pausaAtiva" value="Não"> Não</label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="hidratacao">
+          <b>Hidratação (Lítros)</b>
+          <small>(Meta contínua de consumo)</small>
         </label>
-        <input type="range" id="focoTarde" min="1" max="5" value="3" oninput="document.getElementById('valFocoTarde').innerText = this.value">
-        <div class="val-display">Nível: <span id="valFocoTarde">3</span>/5</div>
+        <input type="range" id="hidratacao" min="0.5" max="2.0" step="0.1" value="1.0" oninput="document.getElementById('valHidratacao').innerText = parseFloat(this.value).toFixed(1)">
+        <div class="val-display"><span id="valHidratacao">1.0</span> L</div>
       </div>
     </div>
 
     <!-- FORMULÁRIO 3: RITO DA NOITE -->
     <div id="rito-Noite" class="rito-content">
       <div class="field-group">
-        <label for="descansoNoite">
-          <b>Alquimia Invisível / Qualidade do Desligamento</b>
-          <small>(1 = Mente acelerada/agitado, 5 = Desligamento total/pronto para descansar)</small>
+        <label><b>Atividade Física / Prática</b></label>
+        <div class="radio-group">
+          <label><input type="radio" name="atividadeFisica" value="Treino" checked> Treino</label>
+          <label><input type="radio" name="atividadeFisica" value="Meditação"> Meditação</label>
+          <label><input type="radio" name="atividadeFisica" value="Nada"> Nada</label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="humorNoite">
+          <b>Humor (Mente)</b>
+          <small>(1 = Péssimo/Agotado, 5 = Excelente/Leve)</small>
         </label>
-        <input type="range" id="descansoNoite" min="1" max="5" value="3" oninput="document.getElementById('valDescansoNoite').innerText = this.value">
-        <div class="val-display">Nível: <span id="valDescansoNoite">3</span>/5</div>
+        <input type="range" id="humorNoite" min="1" max="5" value="3" oninput="document.getElementById('valHumorNoite').innerText = this.value">
+        <div class="val-display">Nível: <span id="valHumorNoite">3</span>/5</div>
       </div>
     </div>
 
@@ -183,15 +211,18 @@
         const rigidez = document.getElementById("rigidez").value;
         const disposicao = document.getElementById("disposicao").value;
         respostaFormatada = `R=${rigidez}/5 | D=${disposicao}/5`;
+
       } else if (ritoAtual === "Tarde") {
-        const foco = document.getElementById("focoTarde").value;
-        respostaFormatada = `Foco/Energia: ${foco}/5`;
+        const pausa = document.querySelector('input[name="pausaAtiva"]:checked').value;
+        const agua = document.getElementById("hidratacao").value;
+        respostaFormatada = `Pausa Ativa: ${pausa} | Hidratação: ${parseFloat(agua).toFixed(1)}L`;
+
       } else if (ritoAtual === "Noite") {
-        const descanso = document.getElementById("descansoNoite").value;
-        respostaFormatada = `Desligamento/Descanso: ${descanso}/5`;
+        const atividade = document.querySelector('input[name="atividadeFisica"]:checked').value;
+        const humor = document.getElementById("humorNoite").value;
+        respostaFormatada = `Prática: ${atividade} | Humor: ${humor}/5`;
       }
 
-      // Resgate do Nome Completo do Alquimista
       const usuario = tg?.initDataUnsafe?.user;
       let nomeCompleto = "Alquimista";
 
