@@ -111,9 +111,9 @@
 
   <!-- Seleção dos 3 Ritos -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="selecionarRito('Manhã')">☀️ Manhã</button>
-    <button class="tab-btn" onclick="selecionarRito('Tarde')">🌤️ Tarde</button>
-    <button class="tab-btn" onclick="selecionarRito('Noite')">🌙 Noite</button>
+    <button class="tab-btn active" onclick="selecionarRito(event, 'Manhã')">☀️ Manhã</button>
+    <button class="tab-btn" onclick="selecionarRito(event, 'Tarde')">🌤️ Tarde</button>
+    <button class="tab-btn" onclick="selecionarRito(event, 'Noite')">🌙 Noite</button>
   </div>
 
   <form id="formBussola">
@@ -151,7 +151,7 @@
 
       <div class="field-group">
         <label for="hidratacao">
-          <b>Hidratação (Lítros)</b>
+          <b>Hidratação (Litros)</b>
           <small>(Meta contínua de consumo)</small>
         </label>
         <input type="range" id="hidratacao" min="0.5" max="2.0" step="0.1" value="1.0" oninput="document.getElementById('valHidratacao').innerText = parseFloat(this.value).toFixed(1)">
@@ -193,7 +193,7 @@
 
     let ritoAtual = "Manhã";
 
-    function selecionarRito(rito) {
+    function selecionarRito(event, rito) {
       ritoAtual = rito;
       
       const btns = document.querySelectorAll('.tab-btn');
@@ -216,7 +216,7 @@
       if (ritoAtual === "Manhã") {
         const rigidez = document.getElementById("rigidez").value;
         const disposicao = document.getElementById("disposicao").value;
-        respostaFormatada = `R=rigidez/5|D={disposicao}/5`;
+        respostaFormatada = `R=${rigidez}/5|D=${disposicao}/5`;
 
       } else if (ritoAtual === "Tarde") {
         const pausa = document.querySelector('input[name="pausaAtiva"]:checked').value;
