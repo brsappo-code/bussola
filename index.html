@@ -2,22 +2,67 @@
 <div id="rito-manha" class="rito-block">
   <h3>🌅 Rito da Manhã</h3>
   
-  <label>Energia Matinal (1 a 5):</label>
+  <label>Energia Matinal (1 a 5):</label><br>
   <input type="range" id="disposicao-manha" min="1" max="5" value="3" oninput="document.getElementById('val-disp').innerText = this.value">
   <span id="val-disp">3</span>/5
 
   <br><br>
 
-  <label>Estado Corporal / Rigidez (1 a 5):</label>
+  <label>Estado Corporal / Rigidez (1 a 5):</label><br>
   <input type="range" id="rigidez-manha" min="1" max="5" value="3" oninput="document.getElementById('val-rigidez').innerText = this.value">
   <span id="val-rigidez">3</span>/5
 
   <br><br>
 
-  <label>Humor / Contentamento (1 a 5):</label>
+  <label>Humor / Contentamento (1 a 5):</label><br>
   <input type="range" id="humor-manha" min="1" max="5" value="3" oninput="document.getElementById('val-humor-m').innerText = this.value">
   <span id="val-humor-m">3</span>/5
 
   <br><br>
   <button onclick="salvarManha()">Salvar Rito da Manhã</button>
+</div>
+
+<!-- RITO DA TARDE -->
+<div id="rito-tarde" class="rito-block">
+  <h3>☀️ Rito da Tarde</h3>
+  
+  <label><b>Pausa de Cuidado / Presença realizada?</b></label><br>
+  <input type="radio" id="pausa-sim" name="pausa_tarde" value="Sim" checked>
+  <label for="pausa-sim">Sim</label>&nbsp;&nbsp;
+  
+  <input type="radio" id="pausa-nao" name="pausa_tarde" value="Não">
+  <label for="pausa-nao">Não</label>
+
+  <br><br>
+
+  <label><b>Foco / Nível de Clareza (1 a 5):</b></label><br>
+  <input type="range" id="foco-tarde" min="1" max="5" value="3" oninput="document.getElementById('val-foco').innerText = this.value">
+  <span id="val-foco">3</span>/5
+
+  <br><br>
+  <button onclick="salvarTarde()">Salvar Rito da Tarde</button>
+</div>
+
+<!-- RITO DA NOITE -->
+<div id="rito-noite" class="rito-block">
+  <h3>🌙 Rito da Noite</h3>
+  
+  <label><b>Atividade Física / Prática:</b></label><br>
+  <input type="radio" id="atv-sim" name="atividade_fisica" value="Sim" checked>
+  <label for="atv-sim">Sim</label>&nbsp;&nbsp;
+  
+  <input type="radio" id="atv-nao" name="atividade_fisica" value="Não">
+  <label for="atv-nao">Não</label>&nbsp;&nbsp;
+  
+  <input type="radio" id="atv-energetico" name="atividade_fisica" value="Invisível / Energético">
+  <label for="atv-energetico">Invisível / Energético</label>
+
+  <br><br>
+
+  <label><b>Qualidade Alimentar (1 = Ruim, 10 = Excelente):</b></label><br>
+  <input type="range" id="alimentacao-noite" min="1" max="10" value="7" oninput="document.getElementById('val-alim').innerText = this.value">
+  <span id="val-alim">7</span>/10
+
+  <br><br>
+  <button onclick="salvarNoite()">Salvar Rito da Noite</button>
 </div>
