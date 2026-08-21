@@ -1,113 +1,184 @@
-<!-- RITO DA MANHÃ -->
-<div id="rito-manha" class="rito-block">
-  <h3>🌅 Rito da Manhã</h3>
-  
-  <label>Energia Matinal (1 a 5):</label><br>
-  <input type="range" id="disposicao-manha" min="1" max="5" value="3" oninput="document.getElementById('val-disp').innerText = this.value">
-  <span id="val-disp">3</span>/5
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bússola Diária — Oficina dos Alquimistas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 15px;
+      background-color: #f4f7f6;
+      color: #333;
+    }
+    .rito-block {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    h3 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    button {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #219150;
+    }
+    input[type="range"] {
+      width: 80%;
+    }
+  </style>
+</head>
+<body>
 
-  <br><br>
+  <!-- RITO DA MANHÃ -->
+  <div id="rito-manha" class="rito-block">
+    <h3>🌅 Rito da Manhã</h3>
+    
+    <label>Energia Matinal (1 a 5):</label><br>
+    <input type="range" id="disposicao-manha" min="1" max="5" value="3" oninput="document.getElementById('val-disp').innerText = this.value">
+    <span id="val-disp">3</span>/5
 
-  <label>Estado Corporal / Rigidez (1 a 5):</label><br>
-  <input type="range" id="rigidez-manha" min="1" max="5" value="3" oninput="document.getElementById('val-rigidez').innerText = this.value">
-  <span id="val-rigidez">3</span>/5
+    <br><br>
 
-  <br><br>
+    <label>Estado Corporal / Rigidez (1 a 5):</label><br>
+    <input type="range" id="rigidez-manha" min="1" max="5" value="3" oninput="document.getElementById('val-rigidez').innerText = this.value">
+    <span id="val-rigidez">3</span>/5
 
-  <label>Humor / Contentamento (1 a 5):</label><br>
-  <input type="range" id="humor-manha" min="1" max="5" value="3" oninput="document.getElementById('val-humor-m').innerText = this.value">
-  <span id="val-humor-m">3</span>/5
+    <br><br>
 
-  <br><br>
-  <button onclick="salvarManha()">Salvar Rito da Manhã</button>
-</div>
+    <label>Humor / Contentamento (1 a 5):</label><br>
+    <input type="range" id="humor-manha" min="1" max="5" value="3" oninput="document.getElementById('val-humor-m').innerText = this.value">
+    <span id="val-humor-m">3</span>/5
 
-<!-- RITO DA TARDE -->
-<div id="rito-tarde" class="rito-block">
-  <h3>☀️ Rito da Tarde</h3>
-  
-  <label><b>Pausa de Cuidado / Presença realizada?</b></label><br>
-  <input type="radio" id="pausa-sim" name="pausa_tarde" value="Sim" checked>
-  <label for="pausa-sim">Sim</label>&nbsp;&nbsp;
-  
-  <input type="radio" id="pausa-nao" name="pausa_tarde" value="Não">
-  <label for="pausa-nao">Não</label>
+    <br><br>
+    <button onclick="salvarManha()">Salvar Rito da Manhã</button>
+  </div>
 
-  <br><br>
+  <!-- RITO DA TARDE -->
+  <div id="rito-tarde" class="rito-block">
+    <h3>☀️ Rito da Tarde</h3>
+    
+    <label><b>Pausa de Cuidado / Presença realizada?</b></label><br>
+    <input type="radio" id="pausa-sim" name="pausa_tarde" value="Sim" checked>
+    <label for="pausa-sim">Sim</label>&nbsp;&nbsp;
+    
+    <input type="radio" id="pausa-nao" name="pausa_tarde" value="Não">
+    <label for="pausa-nao">Não</label>
 
-  <label><b>Foco / Nível de Clareza (1 a 5):</b></label><br>
-  <input type="range" id="foco-tarde" min="1" max="5" value="3" oninput="document.getElementById('val-foco').innerText = this.value">
-  <span id="val-foco">3</span>/5
+    <br><br>
 
-  <br><br>
-  <button onclick="salvarTarde()">Salvar Rito da Tarde</button>
-</div>
+    <label><b>Foco / Nível de Clareza (1 a 5):</b></label><br>
+    <input type="range" id="foco-tarde" min="1" max="5" value="3" oninput="document.getElementById('val-foco').innerText = this.value">
+    <span id="val-foco">3</span>/5
 
-<!-- RITO DA NOITE -->
-<div id="rito-noite" class="rito-block">
-  <h3>🌙 Rito da Noite</h3>
-  
-  <label><b>Atividade Física / Prática:</b></label><br>
-  <input type="radio" id="atv-sim" name="atividade_fisica" value="Sim" checked>
-  <label for="atv-sim">Sim</label>&nbsp;&nbsp;
-  
-  <input type="radio" id="atv-nao" name="atividade_fisica" value="Não">
-  <label for="atv-nao">Não</label>&nbsp;&nbsp;
-  
-  <input type="radio" id="atv-energetico" name="atividade_fisica" value="Invisível / Energético">
-  <label for="atv-energetico">Invisível / Energético</label>
+    <br><br>
+    <button onclick="salvarTarde()">Salvar Rito da Tarde</button>
+  </div>
 
-  <br><br>
+  <!-- RITO DA NOITE -->
+  <div id="rito-noite" class="rito-block">
+    <h3>🌙 Rito da Noite</h3>
+    
+    <label><b>Atividade Física / Prática:</b></label><br>
+    <input type="radio" id="atv-sim" name="atividade_fisica" value="Sim" checked>
+    <label for="atv-sim">Sim</label>&nbsp;&nbsp;
+    
+    <input type="radio" id="atv-nao" name="atividade_fisica" value="Não">
+    <label for="atv-nao">Não</label>&nbsp;&nbsp;
+    
+    <input type="radio" id="atv-energetico" name="atividade_fisica" value="Invisível / Energético">
+    <label for="atv-energetico">Invisível / Energético</label>
 
-  <label><b>Qualidade Alimentar (1 = Ruim, 10 = Excelente):</b></label><br>
-  <input type="range" id="alimentacao-noite" min="1" max="10" value="7" oninput="document.getElementById('val-alim').innerText = this.value">
-  <span id="val-alim">7</span>/10
+    <br><br>
 
-  <br><br>
-  <button onclick="salvarNoite()">Salvar Rito da Noite</button>
-</div>
-// Envio do Rito da Manhã
-function salvarManha() {
-  const disp = document.getElementById('disposicao-manha').value;
-  const rigidez = document.getElementById('rigidez-manha').value;
-  const humor = document.getElementById('humor-manha').value;
+    <label><b>Qualidade Alimentar (1 = Ruim, 10 = Excelente):</b></label><br>
+    <input type="range" id="alimentacao-noite" min="1" max="10" value="7" oninput="document.getElementById('val-alim').innerText = this.value">
+    <span id="val-alim">7</span>/10
 
-  const payload = {
-    chatId: tg.initDataUnsafe?.user?.id || "ID_TESTE",
-    nome: tg.initDataUnsafe?.user?.first_name || "Alquimista",
-    rito: "Rito da Manhã",
-    resposta: `Energia: ${disp}/5 | Rigidez: ${rigidez}/5 | Humor: ${humor}/5`
-  };
+    <br><br>
+    <button onclick="salvarNoite()">Salvar Rito da Noite</button>
+  </div>
 
-  enviarWebhook(payload);
-}
+  <!-- INTEGRAÇÃO COM TELEGRAM E JAVASCRIPT -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
 
-// Envio do Rito da Tarde
-function salvarTarde() {
-  const pausa = document.querySelector('input[name="pausa_tarde"]:checked').value;
-  const foco = document.getElementById('foco-tarde').value;
+    // URL DO SEU GOOGLE APPS SCRIPT
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzGfSW-yjoTod01HxxzDuQq3Fvj376AMgU6U7GJU_4NSxiZutvhk09TRafTyFp7De6I/exec";
 
-  const payload = {
-    chatId: tg.initDataUnsafe?.user?.id || "ID_TESTE",
-    nome: tg.initDataUnsafe?.user?.first_name || "Alquimista",
-    rito: "Rito da Tarde",
-    resposta: `Pausa: ${pausa} | Foco: ${foco}/5`
-  };
+    function enviarWebhook(payload) {
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        tg.close();
+      })
+      .catch((err) => {
+        alert("Erro ao salvar: " + err);
+      });
+    }
 
-  enviarWebhook(payload);
-}
+    // Envio do Rito da Manhã
+    function salvarManha() {
+      const disp = document.getElementById('disposicao-manha').value;
+      const rigidez = document.getElementById('rigidez-manha').value;
+      const humor = document.getElementById('humor-manha').value;
 
-// Envio do Rito da Noite
-function salvarNoite() {
-  const atvOpcao = document.querySelector('input[name="atividade_fisica"]:checked').value;
-  const alim = document.getElementById('alimentacao-noite').value;
+      const payload = {
+        chatId: tg.initDataUnsafe?.user?.id || "ID_TESTE",
+        nome: tg.initDataUnsafe?.user?.first_name || "Alquimista",
+        rito: "Rito da Manhã",
+        resposta: `Energia: ${disp}/5 | Rigidez: ${rigidez}/5 | Humor: ${humor}/5`
+      };
 
-  const payload = {
-    chatId: tg.initDataUnsafe?.user?.id || "ID_TESTE",
-    nome: tg.initDataUnsafe?.user?.first_name || "Alquimista",
-    rito: "Rito da Noite",
-    resposta: `Atividade: ${atvOpcao} | Alimentação: ${alim}/10`
-  };
+      enviarWebhook(payload);
+    }
 
-  enviarWebhook(payload);
-}
+    // Envio do Rito da Tarde
+    function salvarTarde() {
+      const pausa = document.querySelector('input[name="pausa_tarde"]:checked').value;
+      const foco = document.getElementById('foco-tarde').value;
+
+      const payload = {
+        chatId: tg.initDataUnsafe?.user?.id || "ID_TESTE",
+        nome: tg.initDataUnsafe?.user?.first_name || "Alquimista",
+        rito: "Rito da Tarde",
+        resposta: `Pausa: ${pausa} | Foco: ${foco}/5`
+      };
+
+      enviarWebhook(payload);
+    }
+
+    // Envio do Rito da Noite
+    function salvarNoite() {
+      const atvOpcao = document.querySelector('input[name="atividade_fisica"]:checked').value;
+      const alim = document.getElementById('alimentacao-noite').value;
+
+      const payload = {
+        chatId: tg.initDataUnsafe?.user?.id || "ID_TESTE",
+        nome: tg.initDataUnsafe?.user?.first_name || "Alquimista",
+        rito: "Rito da Noite",
+        resposta: `Atividade: ${atvOpcao} | Alimentação: ${alim}/10`
+      };
+
+      enviarWebhook(payload);
+    }
+  </script>
+</body>
+</html>
