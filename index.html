@@ -66,3 +66,48 @@
   <br><br>
   <button onclick="salvarNoite()">Salvar Rito da Noite</button>
 </div>
+// Envio do Rito da Manhã
+function salvarManha() {
+  const disp = document.getElementById('disposicao-manha').value;
+  const rigidez = document.getElementById('rigidez-manha').value;
+  const humor = document.getElementById('humor-manha').value;
+
+  const payload = {
+    chatId: tg.initDataUnsafe?.user?.id || "ID_TESTE",
+    nome: tg.initDataUnsafe?.user?.first_name || "Alquimista",
+    rito: "Rito da Manhã",
+    resposta: `Energia: ${disp}/5 | Rigidez: ${rigidez}/5 | Humor: ${humor}/5`
+  };
+
+  enviarWebhook(payload);
+}
+
+// Envio do Rito da Tarde
+function salvarTarde() {
+  const pausa = document.querySelector('input[name="pausa_tarde"]:checked').value;
+  const foco = document.getElementById('foco-tarde').value;
+
+  const payload = {
+    chatId: tg.initDataUnsafe?.user?.id || "ID_TESTE",
+    nome: tg.initDataUnsafe?.user?.first_name || "Alquimista",
+    rito: "Rito da Tarde",
+    resposta: `Pausa: ${pausa} | Foco: ${foco}/5`
+  };
+
+  enviarWebhook(payload);
+}
+
+// Envio do Rito da Noite
+function salvarNoite() {
+  const atvOpcao = document.querySelector('input[name="atividade_fisica"]:checked').value;
+  const alim = document.getElementById('alimentacao-noite').value;
+
+  const payload = {
+    chatId: tg.initDataUnsafe?.user?.id || "ID_TESTE",
+    nome: tg.initDataUnsafe?.user?.first_name || "Alquimista",
+    rito: "Rito da Noite",
+    resposta: `Atividade: ${atvOpcao} | Alimentação: ${alim}/10`
+  };
+
+  enviarWebhook(payload);
+}
