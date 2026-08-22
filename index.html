@@ -63,21 +63,6 @@
       width: 100%;
       margin: 14px 0;
     }
-    .checkbox-group, .radio-group-vertical {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 10px;
-    }
-    .checkbox-group label, .radio-group-vertical label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: normal;
-      cursor: pointer;
-      font-size: 16px;
-      margin-bottom: 0;
-    }
     .radio-group {
       display: flex;
       gap: 20px;
@@ -177,28 +162,21 @@
     <!-- FORMULÁRIO 3: RITO DA NOITE -->
     <div id="rito-Noite" class="rito-content">
       <div class="field-group">
-        <label><b>Práticas do Dia</b>
-          <small>(Marque todas que realizou)</small>
-        </label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" name="praticasNoite" value="Alquimia Bruta (Força)"> Alquimia Bruta (Força)</label>
-          <label><input type="checkbox" name="praticasNoite" value="Alquimia Fluida (Cardio)"> Alquimia Fluida (Cardio)</label>
-          <label><input type="checkbox" name="praticasNoite" value="Alquimia Invisível (Mental/Respiração)"> Alquimia Invisível (Mental/Respiração)</label>
-          <label><input type="checkbox" name="praticasNoite" value="Alquimia Sutil (Recuperação)"> Alquimia Sutil (Recuperação)</label>
+        <label><b>Atividade Física / Prática</b></label>
+        <div class="radio-group">
+          <label><input type="radio" name="atividadeFisica" value="Treino" checked> Treino</label>
+          <label><input type="radio" name="atividadeFisica" value="Meditação"> Meditação</label>
+          <label><input type="radio" name="atividadeFisica" value="Nada"> Nada</label>
         </div>
       </div>
 
       <div class="field-group">
-        <label><b>Alimentação do Dia</b>
-          <small>(Escolha a opção que melhor descreve hoje)</small>
+        <label for="humorNoite">
+          <b>Humor (Mente)</b>
+          <small>(1 = Ruim, 5 = Excelente)</small>
         </label>
-        <div class="radio-group-vertical">
-          <label><input type="radio" name="alimentacaoNoite" value="🎯 Nutrição Alquímica (Quantidade Ideal + Alta Qualidade)" checked> 🎯 <b>Nutrição Alquímica</b> (Ideal)</label>
-          <label><input type="radio" name="alimentacaoNoite" value="⚡ Alta QTD / Alta QLD (Superávit Limpo)"> ⚡ <b>Alta QTD / Alta QLD</b> (Superávit Limpo)</label>
-          <label><input type="radio" name="alimentacaoNoite" value="🥗 Baixa QTD / Alta QLD (Leve & Nutritivo)"> 🥗 <b>Baixa QTD / Alta QLD</b> (Leve/Nutritivo)</label>
-          <label><input type="radio" name="alimentacaoNoite" value="🍕 Alta QTD / Baixa QLD (Excesso / Deslize)"> 🍕 <b>Alta QTD / Baixa QLD</b> (Excesso/Deslize)</label>
-          <label><input type="radio" name="alimentacaoNoite" value="⚠️ Baixa QTD / Baixa QLD (Beliscos / Pouco Nutriente)"> ⚠️ <b>Baixa QTD / Baixa QLD</b> (Beliscos/Fraco)</label>
-        </div>
+        <input type="range" id="humorNoite" min="1" max="5" value="3" oninput="document.getElementById('valHumorNoite').innerText = this.value">
+        <div class="val-display">Nível: <span id="valHumorNoite">3</span>/5</div>
       </div>
     </div>
 
@@ -238,7 +216,7 @@
       if (ritoAtual === "Manhã") {
         const rigidez = document.getElementById("rigidez").value;
         const disposicao = document.getElementById("disposicao").value;
-        respostaFormatada = `R=${rigidez}/5|D=${disposicao}/5`;
+        respostaFormatada = `R=rigidez/5|D={disposicao}/5`;
 
       } else if (ritoAtual === "Tarde") {
         const pausa = document.querySelector('input[name="pausaAtiva"]:checked').value;
@@ -246,13 +224,9 @@
         respostaFormatada = `Pausa Ativa: ${pausa} | Hidratação: ${parseFloat(agua).toFixed(1)}L`;
 
       } else if (ritoAtual === "Noite") {
-        const praticasMarcadas = Array.from(document.querySelectorAll('input[name="praticasNoite"]:checked'))
-                                      .map(cb => cb.value);
-        
-        const praticasTexto = praticasMarcadas.length > 0 ? praticasMarcadas.join(', ') : 'Nenhuma';
-        const alimentacao = document.querySelector('input[name="alimentacaoNoite"]:checked').value;
-        
-        respostaFormatada = `Práticas: ${praticasTexto} | Alimentação: ${alimentacao}`;
+        const atividade = document.querySelector('input[name="atividadeFisica"]:checked').value;
+        const humor = document.getElementById("humorNoite").value;
+        respostaFormatada = `Prática: ${atividade} | Humor: ${humor}/5`;
       }
 
       const usuario = tg?.initDataUnsafe?.user;
